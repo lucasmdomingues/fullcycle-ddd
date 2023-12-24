@@ -1,25 +1,51 @@
 import Address from "./address";
 
 class Customer {
-    id: string;
-    name: string;
-    address!: Address;
-    active: boolean = false;
+    private id: string;
+    private name: string;
+    private address!: Address;
+    private active: boolean = false;
 
     constructor(id: string, name: string) {
         this.id = id;
         this.name = name;
+        this.validate();
     }
 
     set Address(address: Address) {
         this.address = address;
     }
 
-    activate(){
+    get Name(): string {
+        return this.name
+    }
+
+    activate() {
         if (this.address == undefined) {
             throw new Error("address cannot be empty");
         }
         this.active = true;
+    }
+    
+    deactivate() {
+        this.active = false;
+    }
+
+    validate() {
+        if (this.id.length == 0) {
+            throw new Error("customer id cannot be empty");
+        }
+        if (this.name.length == 0) {
+            throw new Error("customer name cannot be empty");
+        }
+    }
+
+    changeName(name: string): void {
+        this.name = name;
+    }
+
+    isActive(): boolean {
+        return this.active
     }
 }
 
