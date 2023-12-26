@@ -20,6 +20,15 @@ class Customer {
         return this.name
     }
 
+    validate() {
+        if (this.id.length == 0) {
+            throw new Error("customer id cannot be empty");
+        }
+        if (this.name.length == 0) {
+            throw new Error("customer name cannot be empty");
+        }
+    }
+
     activate() {
         if (this.address == undefined) {
             throw new Error("address cannot be empty");
@@ -29,15 +38,6 @@ class Customer {
     
     deactivate() {
         this.active = false;
-    }
-
-    validate() {
-        if (this.id.length == 0) {
-            throw new Error("customer id cannot be empty");
-        }
-        if (this.name.length == 0) {
-            throw new Error("customer name cannot be empty");
-        }
     }
 
     changeName(name: string): void {

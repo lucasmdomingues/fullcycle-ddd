@@ -12,6 +12,7 @@
     "tslint": "^6.1.3"
   },
   "scripts": {
-    "test": "jest"
+    "tsc": "tsc",
+    "test": "yarn tsc --noEmit && jest"
   }
 }

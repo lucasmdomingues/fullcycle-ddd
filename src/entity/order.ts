@@ -24,7 +24,7 @@ class Order {
     }
 
     calculateTotal(): number {
-        return this.items.reduce((acc, item) => acc + item.price, 0);
+        return this.items.reduce((acc, item) => acc + item.calculateTotal(), 0);
     }
 
     validate() {
@@ -35,7 +35,10 @@ class Order {
             throw new Error("customer id cannot be empty");
         }
         if (this.items.length === 0) {
-            throw new Error("items qtd must be greater than zero");
+            throw new Error("order items cannot be empty");
+        }
+        if (this.items.some(item => item.Quantity <= 0)) {
+            throw new Error("items quantity must be greater than zero");
         }
     }
 }
