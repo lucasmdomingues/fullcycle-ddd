@@ -49,4 +49,15 @@ describe("Customer unit tests", () => {
             customer.activate();
         }).toThrow("address cannot be empty")
     })
+
+    it("should add reward points", ()=> {
+        const customer = new Customer("1", "Customer 1")
+        expect(customer.RewardPoints).toBe(0)
+
+        customer.addRewardPoints(10)
+        expect(customer.RewardPoints).toBe(10)
+        
+        customer.addRewardPoints(10)
+        expect(customer.RewardPoints).toBe(20)
+    })
 });
