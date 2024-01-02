@@ -10,6 +10,10 @@ class Product {
         this.validate();
     }
 
+    get ID(): string {
+        return this.id
+    }
+
     get Name(): string {
         return this.name
     }
