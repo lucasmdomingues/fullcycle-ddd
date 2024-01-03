@@ -1,14 +1,27 @@
 class Address {
     street: string;
+    number: number;
     city: string;
-    state: string;
     zipcode: string;
 
-    constructor(street: string, city: string, state: string, zipcode: string) {
+    constructor(street: string, number: number, zipcode: string, city: string,) {
         this.street = street
+        this.number = number
         this.city = city
-        this.state = state
         this.zipcode = zipcode
+    }
+
+    get Street(): string {
+        return this.street
+    }
+    get Number(): number {
+        return this.number
+    }
+    get City(): string {
+        return this.city
+    }
+    get Zipcode(): string {
+        return this.zipcode
     }
 }
 

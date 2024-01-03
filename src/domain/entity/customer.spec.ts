@@ -27,14 +27,14 @@ describe("Customer unit tests", () => {
 
     it("should activate customer", () => {
         const customer = new Customer("1", "foo");
-        const address = new Address("street", "city", "state", "13330-250");
+        const address = new Address("Street 1", 1, "123", "City 1")
 
-        customer.Address = address;
+        customer.changeAddress(address)
         customer.activate();
 
         expect(customer.isActive()).toBe(true);
     })
-    
+
     it("should deactivate customer", () => {
         const customer = new Customer("1", "foo");
 
@@ -42,21 +42,21 @@ describe("Customer unit tests", () => {
 
         expect(customer.isActive()).toBe(false);
     })
-    
+
     it("should throw error when address is empty", () => {
-        expect(()=> {
+        expect(() => {
             const customer = new Customer("1", "foo");
             customer.activate();
         }).toThrow("address cannot be empty")
     })
 
-    it("should add reward points", ()=> {
+    it("should add reward points", () => {
         const customer = new Customer("1", "Customer 1")
         expect(customer.RewardPoints).toBe(0)
 
         customer.addRewardPoints(10)
         expect(customer.RewardPoints).toBe(10)
-        
+
         customer.addRewardPoints(10)
         expect(customer.RewardPoints).toBe(20)
     })

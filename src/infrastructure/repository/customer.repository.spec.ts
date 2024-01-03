@@ -2,8 +2,12 @@ import { Sequelize } from "sequelize-typescript"
 import ProductModel from "../db/sequelize/model/product.model";
 import Product from "../../domain/entity/product";
 import ProductRepository from "./product.repository";
+import CustomerModel from "../db/sequelize/model/customer.model";
+import CustomerRepository from "./customer.repository";
+import Customer from "../../domain/entity/customer";
+import Address from "../../domain/entity/address";
 
-describe("Product repository test", () => {
+describe("Customer repository test", () => {
     let sequelize: Sequelize;
 
     beforeEach(async () => {
@@ -16,7 +20,7 @@ describe("Product repository test", () => {
             }
         })
 
-        sequelize.addModels([ProductModel])
+        sequelize.addModels([CustomerModel])
         await sequelize.sync()
     })
 
@@ -25,69 +29,79 @@ describe("Product repository test", () => {
         await sequelize.close()
     })
 
-    it('should create a product', async () => {
-        const productRepository = new ProductRepository()
-        const product = new Product("1", "Product 1", 100)
+    it('should create a customer', async () => {
+        const customerRepository = new CustomerRepository()
+        const customer = new Customer("123", "Customer 1")
+        const address = new Address("Street 1", 1, "123", "City 1")
+        customer.changeAddress(address)
 
-        await productRepository.create(product)
+        await customerRepository.create(customer)
 
-        let productModel = await ProductModel.findOne({ where: { id: "1" } })
+        const customerModel = await CustomerModel.findOne({ where: { id: "123" } })
 
-        expect(productModel.toJSON()).toStrictEqual({
-            id: "1",
-            name: "Product 1",
-            price: 100
+        expect(customerModel.toJSON()).toStrictEqual({
+            id: customer.Id,
+            name: customer.Name,
+            active: customer.isActive(),
+            rewardPoints: customer.RewardPoints,
+            street: address.Street,
+            number: address.Number,
+            zipcode: address.Zipcode,
+            city: address.City
         })
     })
 
-    it('should update a product', async () => {
-        const productRepository = new ProductRepository()
-        const p1 = new Product("1", "Product 1", 100)
+    it('should update a customer', async () => {
+        const customerRepository = new CustomerRepository()
+        const customer = new Customer("123", "Customer 1")
+        const address = new Address("Street 1", 1, "123", "City 1")
+        customer.changeAddress(address)
 
-        await productRepository.create(p1)
+        await customerRepository.create(customer)
+        customer.changeName("Customer 2")
+        await customerRepository.update(customer)
 
-        p1.changeName('Product 2')
-        p1.changePrice(200)
+        const customerModel = await CustomerModel.findOne({ where: { id: "123" } })
 
-        await productRepository.update(p1)
-
-        let p2 = await ProductModel.findOne({ where: { id: "1" } })
-
-        expect(p2.toJSON()).toStrictEqual({
-            id: "1",
-            name: "Product 2",
-            price: 200
+        expect(customerModel.toJSON()).toStrictEqual({
+            id: customer.Id,
+            name: customer.Name,
+            active: customer.isActive(),
+            rewardPoints: customer.RewardPoints,
+            street: address.Street,
+            number: address.Number,
+            zipcode: address.Zipcode,
+            city: address.City
         })
     })
 
     it("should find a product", async () => {
-        const productRepository = new ProductRepository()
-        const product = new Product("1", "Product 1", 100)
+        const customerRepository = new CustomerRepository()
+        const customer = new Customer("123", "Customer 1")
+        const address = new Address("Street 1", 1, "123", "City 1")
+        customer.changeAddress(address)
 
-        await productRepository.create(product)
+        await customerRepository.create(customer)
 
-        const productModel = await ProductModel.findOne({ where: { id: "1" } })
-        const foundedProduct = await productRepository.find("1")
+        const customerModel = await customerRepository.find(customer.Id)
 
-        expect(productModel.toJSON()).toStrictEqual({
-            id: foundedProduct.ID,
-            name: foundedProduct.Name,
-            price: foundedProduct.Price
-        })
+        expect(customer).toStrictEqual(customerModel)
     })
 
-    it("should find all products", async () => {
-        const productRepository = new ProductRepository()
+    // TODO: Add test to customer not found
 
-        const p1 = new Product("1", "Product 1", 100)
-        await productRepository.create(p1)
+    // it("should find all products", async () => {
+    //     const productRepository = new ProductRepository()
 
-        const p2 = new Product("2", "Product 2", 200)
-        await productRepository.create(p2)
+    //     const p1 = new Product("1", "Product 1", 100)
+    //     await productRepository.create(p1)
 
-        const products = [p1, p2]
-        const foundedProducts = await productRepository.findAll();
+    //     const p2 = new Product("2", "Product 2", 200)
+    //     await productRepository.create(p2)
 
-        expect(products).toEqual(foundedProducts)
-    })
+    //     const products = [p1, p2]
+    //     const foundedProducts = await productRepository.findAll();
+
+    //     expect(products).toEqual(foundedProducts)
+    // })
 })

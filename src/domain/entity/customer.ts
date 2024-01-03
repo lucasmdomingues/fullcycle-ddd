@@ -13,10 +13,6 @@ class Customer {
         this.validate();
     }
 
-    set Address(address: Address) {
-        this.address = address;
-    }
-
     get Name(): string {
         return this.name
     }
@@ -27,6 +23,10 @@ class Customer {
 
     get Id(): string {
         return this.id
+    }
+
+    get Address(): Address {
+        return this.address
     }
 
     validate() {
@@ -59,6 +59,10 @@ class Customer {
 
     addRewardPoints(points: number) {
         this.rewardPoints += points
+    }
+
+    changeAddress(address: Address) {
+        this.address = address
     }
 }
 

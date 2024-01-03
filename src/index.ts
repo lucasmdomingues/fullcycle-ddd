@@ -3,10 +3,10 @@ import Customer from "./domain/entity/customer";
 import Order from "./domain/entity/order";
 import OrderItem from "./domain/entity/order_item";
 
-const address = new Address("Teste", "Osasco", "SP", "06213-100");
+const address = new Address("Street 1", 1, "123", "City 1")
 
 const customer = new Customer("1", "Lucas");
-customer.Address = address;
+customer.changeAddress(address)
 customer.activate();
 
 const item1 = new OrderItem("1", "p1", "Item 1", 10, 1);
