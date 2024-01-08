@@ -1,11 +1,8 @@
-import { Sequelize } from "sequelize-typescript"
-import ProductModel from "../db/sequelize/model/product.model";
-import Product from "../../domain/entity/product";
-import ProductRepository from "./product.repository";
+import { Sequelize } from "sequelize-typescript";
+import Address from "../../domain/entity/address";
+import Customer from "../../domain/entity/customer";
 import CustomerModel from "../db/sequelize/model/customer.model";
 import CustomerRepository from "./customer.repository";
-import Customer from "../../domain/entity/customer";
-import Address from "../../domain/entity/address";
 
 describe("Customer repository test", () => {
     let sequelize: Sequelize;
@@ -88,20 +85,33 @@ describe("Customer repository test", () => {
         expect(customer).toStrictEqual(customerModel)
     })
 
-    // TODO: Add test to customer not found
+    it("should throw a not found", async () => {
+        const customerRepository = new CustomerRepository()
 
-    // it("should find all products", async () => {
-    //     const productRepository = new ProductRepository()
+        expect(async () => {
+            let customerModel = await customerRepository.find("1234")
+        }).rejects.toThrow("customer not found")
+    })
 
-    //     const p1 = new Product("1", "Product 1", 100)
-    //     await productRepository.create(p1)
+    it("should find all customers", async () => {
+        const c1 = new Customer("123", "Customer 1")
+        const a1 = new Address("Street 1", 1, "123", "City 1")
+        c1.changeAddress(a1)
+        c1.addRewardPoints(10)
 
-    //     const p2 = new Product("2", "Product 2", 200)
-    //     await productRepository.create(p2)
+        const c2 = new Customer("456", "Customer 2")
+        const a2 = new Address("Street 2", 2, "456", "City 2")
+        c2.changeAddress(a2)
+        c1.addRewardPoints(20)
 
-    //     const products = [p1, p2]
-    //     const foundedProducts = await productRepository.findAll();
+        const customerRepository = new CustomerRepository()
+        await customerRepository.create(c1)
+        await customerRepository.create(c2)
 
-    //     expect(products).toEqual(foundedProducts)
-    // })
+        const customers = await customerRepository.findAll();
+
+        expect(customers).toHaveLength(2)
+        expect(customers).toContainEqual(c1)
+        expect(customers).toContainEqual(c2)
+    })
 })

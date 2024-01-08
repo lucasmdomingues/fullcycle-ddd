@@ -19,8 +19,20 @@ class Order {
         this.validate();
     }
 
+    get ID(): string {
+        return this.id
+    }
+
     get Total(): number {
         return this.total
+    }
+
+    get CustomerID(): string {
+        return this.customerID
+    }
+
+    get Items(): OrderItem[] {
+        return this.items
     }
 
     calculateTotal(): number {

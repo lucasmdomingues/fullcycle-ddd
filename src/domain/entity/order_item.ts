@@ -13,12 +13,24 @@ class OrderItem {
         this.quantity = quantity;
     }
 
+    get ID(): string {
+        return this.id
+    }
+
     get Price(): number {
         return this.price
     }
 
     get Quantity(): number {
         return this.quantity
+    }
+
+    get Name(): string {
+        return this.name
+    }
+
+    get ProductID(): string {
+        return this.productID
     }
 
     calculateTotal(): number {

@@ -3,6 +3,7 @@ import Customer from "../../domain/entity/customer"
 import CustomerRepositoryInterface from "../../domain/repository/customer.repository.interface"
 import CustomerModel from "../db/sequelize/model/customer.model"
 
+// Um Repository por Aggregate
 class CustomerRepository implements CustomerRepositoryInterface {
     async create(entity: Customer): Promise<void> {
         await CustomerModel.create({
@@ -45,7 +46,7 @@ class CustomerRepository implements CustomerRepositoryInterface {
                 rejectOnEmpty: true,
             })
         } catch (error) {
-            throw new Error("Customer not found");
+            throw new Error("customer not found");
         }
 
 
@@ -61,10 +62,28 @@ class CustomerRepository implements CustomerRepositoryInterface {
         return customer
     }
 
-    findAll(): Promise<Customer[]> {
-        throw new Error("Method not implemented.")
-    }
+    async findAll(): Promise<Customer[]> {
+        const customers = await CustomerModel.findAll()
 
+        return customers.map((c) => {
+            let address = new Address(
+                c.street,
+                c.number,
+                c.zipcode,
+                c.city,
+            )
+
+            let customer = new Customer(c.id, c.name)
+            customer.changeAddress(address)
+            customer.addRewardPoints(c.rewardPoints)
+
+            if (c.active) {
+                customer.activate();
+            }
+
+            return customer
+        })
+    }
 }
 
 export default CustomerRepository
