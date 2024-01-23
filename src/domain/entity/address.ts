@@ -23,6 +23,10 @@ class Address {
     get Zipcode(): string {
         return this.zipcode
     }
+
+    toString(): string {
+        return `${this.Street}, ${this.Number}, ${this.city}, ${this.Zipcode}`
+    }
 }
 
 export default Address
